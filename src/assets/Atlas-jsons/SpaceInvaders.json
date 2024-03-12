@@ -1,0 +1,355 @@
+{
+  "frames": {
+    "Invader1-0": {
+      "frame": {
+        "x": 2,
+        "y": 3,
+        "w": 13,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 3,
+        "w": 13,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader2-0": {
+      "frame": {
+        "x": 18,
+        "y": 3,
+        "w": 13,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 3,
+        "w": 13,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader3-0": {
+      "frame": {
+        "x": 3,
+        "y": 19,
+        "w": 10,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 19,
+        "w": 10,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader4-0": {
+      "frame": {
+        "x": 19,
+        "y": 19,
+        "w": 10,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 19,
+        "w": 10,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader5-0": {
+      "frame": {
+        "x": 3,
+        "y": 35,
+        "w": 11,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 35,
+        "w": 11,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader6-0": {
+      "frame": {
+        "x": 18,
+        "y": 35,
+        "w": 13,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 35,
+        "w": 13,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader7-0": {
+      "frame": {
+        "x": 3,
+        "y": 51,
+        "w": 10,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 51,
+        "w": 10,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader8-0": {
+      "frame": {
+        "x": 19,
+        "y": 51,
+        "w": 10,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 51,
+        "w": 10,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader9-0": {
+      "frame": {
+        "x": 3,
+        "y": 67,
+        "w": 10,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 67,
+        "w": 10,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "Invader10-0": {
+      "frame": {
+        "x": 19,
+        "y": 67,
+        "w": 10,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 67,
+        "w": 10,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "player-laser-0": {
+      "frame": {
+        "x": 38,
+        "y": 4,
+        "w": 3,
+        "h": 8
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 4,
+        "w": 3,
+        "h": 8
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "enemy-laser-0": {
+      "frame": {
+        "x": 37,
+        "y": 20,
+        "w": 5,
+        "h": 8
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 20,
+        "w": 5,
+        "h": 8
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "laser-explosion-start-0": {
+      "frame": {
+        "x": 37,
+        "y": 37,
+        "w": 7,
+        "h": 7
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 37,
+        "w": 7,
+        "h": 7
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "laser-explosion-middle-0": {
+      "frame": {
+        "x": 33,
+        "y": 51,
+        "w": 15,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 33,
+        "y": 51,
+        "w": 15,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "laser-explosion-end-0": {
+      "frame": {
+        "x": 32,
+        "y": 66,
+        "w": 17,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 66,
+        "w": 17,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "mothership-0": {
+      "frame": {
+        "x": 47,
+        "y": 4,
+        "w": 18,
+        "h": 9
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 47,
+        "y": 4,
+        "w": 18,
+        "h": 9
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    },
+    "ship-0": {
+      "frame": {
+        "x": 67,
+        "y": 3,
+        "w": 11,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 67,
+        "y": 3,
+        "w": 11,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 112,
+        "h": 80
+      }
+    }
+  },
+  "meta": {
+    "app": "sprite-sheet-to-json",
+    "version": "1.0.0",
+    "image": "SpaceInvaders.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 112,
+      "h": 80
+    },
+    "scale": "1"
+  }
+}
