@@ -8,6 +8,7 @@ import HealthBar from '../../assets/spaceinvaders-images/SpaceInvaders_Health.pn
 import spaceInvaders from '../../assets/spaceinvaders-images/SpaceInvaders.png'
 import spaceInvadersJson from '../../assets/Atlas-jsons/SpaceInvaders.json'
 import laserShot from '../../assets/spaceinvaders-sounds/shoot02wav-14562.mp3'
+import { act } from "@testing-library/react";
 function SpaceInvaders() {
     class Laser extends Phaser.Physics.Arcade.Sprite 
     {
@@ -116,7 +117,12 @@ function SpaceInvaders() {
             ])
         }
         createEnemy(group) {
-            console.log(group)
+            let grouping = group.getChildren();
+            let invaders = grouping[0].getChildren();
+            invaders.forEach(enemy => {
+                enemy.createEnemies();
+            });
+
         }
     }
     class SpaceInvaders extends Phaser.Scene
