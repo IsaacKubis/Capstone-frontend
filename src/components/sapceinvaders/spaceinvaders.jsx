@@ -1,44 +1,40 @@
 import Phaser, { GameObjects } from "phaser";
+
+import HealthBar from '../../assets/spaceinvaders-images/SpaceInvaders_Health.png'
+import { act } from "@testing-library/react";
 import background from '../../assets/spaceinvaders-images/SpaceInvaders_Background.png'
 import borderBox from '../../assets/spaceinvaders-images/SpaceInvaders_Borders.png'
-import spaceBackGround from '../../assets/tilemaps/spaceinvaderstile._background.csv'
-import ui from '../../assets/tilemaps/spaceinvaderstile._ui_ui.csv'
+import laserShot from '../../assets/spaceinvaders-sounds/shoot02wav-14562.mp3'
 import logo from '../../assets/spaceinvaders-images/SpaceInvaders_LogoLarge.png'
-import HealthBar from '../../assets/spaceinvaders-images/SpaceInvaders_Health.png'
+import spaceBackGround from '../../assets/tilemaps/spaceinvaderstile._background.csv'
 import spaceInvaders from '../../assets/spaceinvaders-images/SpaceInvaders.png'
 import spaceInvadersJson from '../../assets/Atlas-jsons/SpaceInvaders.json'
-import laserShot from '../../assets/spaceinvaders-sounds/shoot02wav-14562.mp3'
-import { act } from "@testing-library/react";
+import ui from '../../assets/tilemaps/spaceinvaderstile._ui_ui.csv'
+
 function SpaceInvaders() {
     class Laser extends Phaser.Physics.Arcade.Sprite 
     {
         constructor(scene, x, y) {
             super(scene,x,y,'invaders', 'player-laser-0')
+            this.setScale(2)
         }
 
         fire(x,y) {
             this.enableBody(true, x+1, y, true, true)
-            // this.body.reset(x+1,y);
-            // this.body.setSize(5,10)
-            this.setScale(2)
-            this.setActive(true);
-            this.setVisible(true);
             this.setVelocityY(-250);
         }
         
         preUpdate(time, delta) {
             super.preUpdate(time, delta);
             if (this.y <= 170) {
-                this.setActive(false);
-                this.setVisible(false);
+                this.disableBody(true, true);
             }
         }
     }
     class LaserGroup extends Phaser.Physics.Arcade.Group
     {
         constructor(scene) {
-            super(scene.physics.world, scene);
-            this.createMultiple({
+            super(scene.physics.world, scene,{
                 classType: Laser,
                 frameQuantity: 1,
                 active: false,
@@ -57,77 +53,112 @@ function SpaceInvaders() {
     }
     class Enemy extends Phaser.Physics.Arcade.Sprite
     {
-        constructor(scene,x,y) {
-            super(scene,x,y, 'invaders', 'Invader1-0');
-        }
-        createEnemies() {
-            this.enableBody(true, this.x, this.y, true, true)
+        constructor(scene,x,y,key,frame) {
+            super(scene,x,y,key,frame);
             this.setScale(2);
-            this.setActive(true);
-            this.setVisible(true);
-            this.setFrame('Invader1-0')
-            
-        };
+        }
     }
     class EnemyGroup extends Phaser.Physics.Arcade.Group
     {
         constructor(scene) {
             super(scene.physics.world, scene);
-            this.createMultiple([
-                {
-                    classType: Enemy,
-                    frameQuantity: 9,
-                    setXY: {x: 100, y: 200, stepX: 50},
-                    active: false,
-                    visible: false,
-                    key: 'enemy'
-                },
-                {
-                    classType: Enemy,
-                    frameQuantity: 9,
-                    setXY: {x: 100, y: 250, stepX: 50},
-                    active: false,
-                    visible: false,
-                    key: 'enemy'
-                },
-                {
-                    classType: Enemy,
-                    frameQuantity: 9,
-                    setXY: {x: 100, y: 300, stepX: 50},
-                    active: false,
-                    visible: false,
-                    key: 'enemy'
-                },
-                {
-                    classType: Enemy,
-                    frameQuantity: 9,
-                    setXY: {x: 100, y: 350, stepX: 50},
-                    active: false,
-                    visible: false,
-                    key: 'enemy'
-                },
-                {
-                    classType: Enemy,
-                    frameQuantity: 9,
-                    setXY: {x: 100, y: 400, stepX: 50},
-                    active: false,
-                    visible: false,
-                    key: 'enemy'
-                }
-            ])
-        }
-        createEnemy(group) {
-            let grouping = group.getChildren();
-            let invaders = grouping[0].getChildren();
-            invaders.forEach(enemy => {
-                enemy.createEnemies();
-            });
 
+            this.resetEnemies();
+        }
+
+        resetEnemies ()
+        {
+            //  Clear everything in this Group
+            this.clear(true, true);
+
+            this.direction = 0; // 0 = left, 1 = right
+            this.x = 320; // the middle of the screen
+            this.speed = 0.05; // speed invaders move - you could change this per wave
+
+            //  Create a grid of invaders - you could change the frame per wave
+            this.createMultiple(
+                [
+                    {
+                        classType: Enemy,
+                        frameQuantity: 9,
+                        setXY: {x: 100, y: 200, stepX: 50},
+                        key: 'invaders',
+                        frame: 'Invader1-0'
+                    },
+                    {
+                        classType: Enemy,
+                        frameQuantity: 9,
+                        setXY: {x: 100, y: 250, stepX: 50},
+                        key: 'invaders',
+                        frame: 'Invader2-0'
+                    },
+                    {
+                        classType: Enemy,
+                        frameQuantity: 9,
+                        setXY: {x: 100, y: 300, stepX: 50},
+                        key: 'invaders',
+                        frame: 'Invader3-0'
+                    },
+                    {
+                        classType: Enemy,
+                        frameQuantity: 9,
+                        setXY: {x: 100, y: 350, stepX: 50},
+                        key: 'invaders',
+                        frame: 'Invader4-0'
+                    },
+                    {
+                        classType: Enemy,
+                        frameQuantity: 9,
+                        setXY: {x: 100, y: 400, stepX: 50},
+                        key: 'invaders',
+                        frame: 'Invader5-0'
+                    }
+                ]
+            );
+        }
+
+        update (delta) {
+
+            const prevX = this.x;
+
+            if (this.direction === 0)
+            {
+                this.x -= (delta * this.speed);
+
+                if (this.x <= 230)
+                {
+                    this.direction = 1;
+                    this.x = 230;
+                }
+            }
+            else
+            {
+                this.x += (delta * this.speed);
+
+                if (this.x >= 440)
+                {
+                    this.direction = 0;
+                    this.x = 440;
+                }
+            }
+
+            //  Amount to move each invader by
+            const moveX = prevX - this.x;
+
+            const invaders = this.getChildren();
+
+            invaders.forEach(invader => {
+
+                invader.x -= moveX;
+
+            });
         }
     }
+
     class SpaceInvaders extends Phaser.Scene
     {
         score;
+
         constructor() {
             super();
             this.ship = null;
@@ -166,7 +197,13 @@ function SpaceInvaders() {
             this.createText();
             this.addEvents();
             this.addShip();
-            this.enemyGroups();
+
+            //  You should do this only once, not in the update loop
+            this.cursors = this.input.keyboard.addKeys(
+                {up:Phaser.Input.Keyboard.KeyCodes.W,
+                down:Phaser.Input.Keyboard.KeyCodes.S,
+                left:Phaser.Input.Keyboard.KeyCodes.A,
+                right:Phaser.Input.Keyboard.KeyCodes.D});
         }
         addEvents() {
             this.input.keyboard.on('keydown-SPACE', shoot => {
@@ -176,19 +213,24 @@ function SpaceInvaders() {
 
         shootLaser() {
             this.laserGroup.fireLaser(this.ship.x, this.ship.y, this.laserShot)
-            this.physics.add.overlap(this.laserGroup, this.enemyGroup, destroyEnemy, null, this)
-            function destroyEnemy(laser, enemy) {
-                laser.disableBody(true,true)
-                enemy.disableBody(true,true)
-                // enemy.destroy();
-                this.score += 100;
-                this.scoreText.setText('Score: ' + this.score);
-                if(this.enemyGroup.countActive(true) === 0){
-                    this.enemyGroups();
-                    this.wave += 1;
-                    this.waveText.setText('Wave: ' + this.wave);
-                }
+            this.physics.add.overlap(this.laserGroup, this.enemyGroup, this.destroyEnemy, null, this)
+        }
+
+        destroyEnemy (laser, enemy) {
+            laser.disableBody(true,true)
+            enemy.disableBody(true,true)
+            // enemy.destroy();
+            this.score += 100;
+            this.scoreText.setText('Score: ' + this.score);
+            if(this.enemyGroup.countActive(true) === 0){
+                this.spawnEnemyGroup();
+                this.wave += 1;
+                this.waveText.setText('Wave: ' + this.wave);
             }
+        }
+
+        spawnEnemyGroup() {
+            this.enemyGroup.resetEnemies();
         }
 
         BackGround() {
@@ -227,22 +269,16 @@ function SpaceInvaders() {
             this.ship.setCollideWorldBounds(true);
             this.ship.setScale(3)
         }
-        enemyGroups() {
-            const group = this.add.group([this.enemyGroup]);
-            this.enemyGroup.createEnemy(group)
-        }
-        update() {
-            let cursors = this.input.keyboard.addKeys(
-                {up:Phaser.Input.Keyboard.KeyCodes.W,
-                down:Phaser.Input.Keyboard.KeyCodes.S,
-                left:Phaser.Input.Keyboard.KeyCodes.A,
-                right:Phaser.Input.Keyboard.KeyCodes.D});
 
-            if (cursors.left.isDown)
+        update(time, delta) {
+
+            this.enemyGroup.update(delta);
+
+            if (this.cursors.left.isDown)
             {
                 this.ship.setVelocityX(-180);
             }
-            else if (cursors.right.isDown)
+            else if (this.cursors.right.isDown)
             {
                 this.ship.setVelocityX(180);
             } else {
@@ -256,10 +292,11 @@ function SpaceInvaders() {
         type: Phaser.AUTO,
         width: 640,
         height: 920,
+        pixelArt: true,
         physics: {
             default: 'arcade',
             arcade: {
-                debug: true,
+                debug: false,
                 gravity: { y: 0 }
             }
         },
