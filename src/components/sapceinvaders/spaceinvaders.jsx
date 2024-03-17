@@ -10,149 +10,13 @@ import spaceBackGround from '../../assets/tilemaps/spaceinvaderstile._background
 import spaceInvaders from '../../assets/spaceinvaders-images/SpaceInvaders.png'
 import spaceInvadersJson from '../../assets/Atlas-jsons/SpaceInvaders.json'
 import ui from '../../assets/tilemaps/spaceinvaderstile._ui_ui.csv'
-
+import LaserGroup from "./spaceinvadersclasses/LaserGroup";
+import EnemyGroup from "./spaceinvadersclasses/EnemyGroup";
+import EnemyLaserGroup from "./spaceinvadersclasses/EnemyLaserGroup";
 function SpaceInvaders() {
-    class Laser extends Phaser.Physics.Arcade.Sprite 
+    class BarrierGroup extends Phaser.Physics.Arcade.Group 
     {
-        constructor(scene, x, y) {
-            super(scene,x,y,'invaders', 'player-laser-0')
-            this.setScale(2)
-        }
 
-        fire(x,y) {
-            this.enableBody(true, x+1, y, true, true)
-            this.setVelocityY(-250);
-        }
-        
-        preUpdate(time, delta) {
-            super.preUpdate(time, delta);
-            if (this.y <= 170) {
-                this.disableBody(true, true);
-            }
-        }
-    }
-    class LaserGroup extends Phaser.Physics.Arcade.Group
-    {
-        constructor(scene) {
-            super(scene.physics.world, scene,{
-                classType: Laser,
-                frameQuantity: 1,
-                active: false,
-                visible: false,
-                key: 'laser'
-            })
-        }
-        fireLaser(x,y, laserShot) {
-            const laser = this.getFirstDead(false);
-            if (laser) {
-                laser.fire(x,y);
-                laserShot.setVolume(0.5);
-                laserShot.play();
-            }
-        }
-    }
-    class Enemy extends Phaser.Physics.Arcade.Sprite
-    {
-        constructor(scene,x,y,key,frame) {
-            super(scene,x,y,key,frame);
-            this.setScale(2);
-        }
-    }
-    class EnemyGroup extends Phaser.Physics.Arcade.Group
-    {
-        constructor(scene) {
-            super(scene.physics.world, scene);
-
-            this.resetEnemies();
-        }
-
-        resetEnemies ()
-        {
-            //  Clear everything in this Group
-            this.clear(true, true);
-
-            this.direction = 0; // 0 = left, 1 = right
-            this.x = 320; // the middle of the screen
-            this.speed = 0.05; // speed invaders move - you could change this per wave
-
-            //  Create a grid of invaders - you could change the frame per wave
-            this.createMultiple(
-                [
-                    {
-                        classType: Enemy,
-                        frameQuantity: 9,
-                        setXY: {x: 100, y: 200, stepX: 50},
-                        key: 'invaders',
-                        frame: 'Invader1-0'
-                    },
-                    {
-                        classType: Enemy,
-                        frameQuantity: 9,
-                        setXY: {x: 100, y: 250, stepX: 50},
-                        key: 'invaders',
-                        frame: 'Invader2-0'
-                    },
-                    {
-                        classType: Enemy,
-                        frameQuantity: 9,
-                        setXY: {x: 100, y: 300, stepX: 50},
-                        key: 'invaders',
-                        frame: 'Invader3-0'
-                    },
-                    {
-                        classType: Enemy,
-                        frameQuantity: 9,
-                        setXY: {x: 100, y: 350, stepX: 50},
-                        key: 'invaders',
-                        frame: 'Invader4-0'
-                    },
-                    {
-                        classType: Enemy,
-                        frameQuantity: 9,
-                        setXY: {x: 100, y: 400, stepX: 50},
-                        key: 'invaders',
-                        frame: 'Invader5-0'
-                    }
-                ]
-            );
-        }
-
-        update (delta) {
-
-            const prevX = this.x;
-
-            if (this.direction === 0)
-            {
-                this.x -= (delta * this.speed);
-
-                if (this.x <= 230)
-                {
-                    this.direction = 1;
-                    this.x = 230;
-                }
-            }
-            else
-            {
-                this.x += (delta * this.speed);
-
-                if (this.x >= 440)
-                {
-                    this.direction = 0;
-                    this.x = 440;
-                }
-            }
-
-            //  Amount to move each invader by
-            const moveX = prevX - this.x;
-
-            const invaders = this.getChildren();
-
-            invaders.forEach(invader => {
-
-                invader.x -= moveX;
-
-            });
-        }
     }
 
     class SpaceInvaders extends Phaser.Scene
@@ -167,7 +31,10 @@ function SpaceInvaders() {
             this.enemyGroup = null;
             this.enemy = null;
             this.score = 0;
-            this.wave = 1;
+            this.wave = 5;
+            this.health = 5;
+            this.lives = 3;
+            this.frame = 0;
         }
 
         preload() {
@@ -192,12 +59,15 @@ function SpaceInvaders() {
             this.BackGround();
             this.createUi();
             this.laserGroup = new LaserGroup(this);
+            this.enemyLaserGroup = new EnemyLaserGroup(this);
             this.enemyGroup = new EnemyGroup(this);
             this.laserShot = this.sound.add('laserShot');
             this.createText();
             this.addEvents();
             this.addShip();
-
+            this.createHealth();
+            this.createLives();
+            this.barrierGroup = new BarrierGroup(this);
             //  You should do this only once, not in the update loop
             this.cursors = this.input.keyboard.addKeys(
                 {up:Phaser.Input.Keyboard.KeyCodes.W,
@@ -245,16 +115,6 @@ function SpaceInvaders() {
             const layer2 = map2.createLayer(0, tileSet2, 0, 0);
             this.spriteLogo = this.add.image(200,110, 'logo')
             this.spriteLogo.setScale(.5);
-            this.healthImage = this.add.sprite(240, 890, 'healthBar', 0)
-            this.healthImage.setScale(2)
-            this.livesImage = this.add.group();
-            this.livesImage.createMultiple({
-                key: 'invaders',
-                frame: 'ship-0',
-                setXY: {x: 370, y:890, stepX: 25},
-                repeat: 2,
-                setScale: { x: 2, y: 2},
-            });
         }
 
         createText() {
@@ -264,12 +124,49 @@ function SpaceInvaders() {
             this.livesText = this.add.text(360,850, 'Lives', { fontSize: '24px', fill: '#000' });
             this.healthText = this.add.text(200, 850, 'Health', { fontSize: '24px', fill: '#000'});
         }
+        createHealth() {
+            this.healthImage = this.add.sprite(240, 890, 'healthBar', 0)
+            this.healthImage.setScale(2)
+
+            this.physics.add.overlap(this.enemyLaserGroup, this.ship, this.takeDamage, null, this)
+        }
+        createLives() {
+            this.livesImage = this.add.group();
+            this.livesImage.createMultiple({
+                key: 'invaders',
+                frame: 'ship-0',
+                setXY: {x: 370, y:890, stepX: 25},
+                active: true,
+                visible: true,
+                repeat: 2,
+                setScale: { x: 2, y: 2},
+            });
+        }
+        takeDamage(enemyLaser, ship) {
+            ship.disableBody(true,true)
+            this.health -= 1;
+            this.frame += 1
+            this.healthImage.setFrame(this.frame)
+            if(this.health === 0 && this.lives === 0) {
+                this.gameOver();
+            } else if (this.health === 0) {
+                this.health = 5;
+                this.frame = 0;
+                this.healthImage.setFrame(this.frame)
+                this.lives -= 1;
+                let life = this.livesImage.getChildren().filter(e => e.active === true);
+                life[life.length - 1].setTint(0xff0000)
+                life[life.length - 1].setActive(false)
+            } 
+        }
         addShip() {
             this.ship = this.physics.add.sprite(320, 780, 'invaders', 'ship-0');
             this.ship.setCollideWorldBounds(true);
             this.ship.setScale(3)
         }
-
+        gameOver() {
+            this.scene.pause()
+        }
         update(time, delta) {
 
             this.enemyGroup.update(delta);
@@ -302,7 +199,6 @@ function SpaceInvaders() {
         },
         scene: SpaceInvaders
     };
-
     const game = new Phaser.Game(config);
 }
 
