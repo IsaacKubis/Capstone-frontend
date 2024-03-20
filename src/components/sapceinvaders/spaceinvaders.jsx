@@ -1,5 +1,5 @@
 import Phaser, { GameObjects } from "phaser";
-
+import './spaceInvadersfont.scss'
 import HealthBar from '../../assets/spaceinvaders-images/SpaceInvaders_Health.png'
 import { act } from "@testing-library/react";
 import background from '../../assets/spaceinvaders-images/SpaceInvaders_Background.png'
@@ -13,12 +13,13 @@ import ui from '../../assets/tilemaps/spaceinvaderstile._ui_ui.csv'
 import LaserGroup from "./spaceinvadersclasses/LaserGroup";
 import EnemyGroup from "./spaceinvadersclasses/EnemyGroup";
 import EnemyLaserGroup from "./spaceinvadersclasses/EnemyLaserGroup";
+import GameMusic from '../../assets/spaceinvaders-sounds/game-Music.mp3'
 function SpaceInvaders() {
     class BarrierGroup extends Phaser.Physics.Arcade.Group 
     {
 
     }
-
+    
     class SpaceInvaders extends Phaser.Scene
     {
         score;
@@ -31,7 +32,7 @@ function SpaceInvaders() {
             this.enemyGroup = null;
             this.enemy = null;
             this.score = 0;
-            this.wave = 5;
+            this.wave = 1;
             this.health = 5;
             this.lives = 3;
             this.frame = 0;
@@ -53,6 +54,13 @@ function SpaceInvaders() {
                 }
             });
             this.load.audio('laserShot', laserShot)
+            this.load.audio('music', GameMusic)
+            this.loadFont();
+            
+        }
+
+        restart() {
+
         }
 
         create() {
@@ -62,6 +70,10 @@ function SpaceInvaders() {
             this.enemyLaserGroup = new EnemyLaserGroup(this);
             this.enemyGroup = new EnemyGroup(this);
             this.laserShot = this.sound.add('laserShot');
+            this.music = this.sound.add('music');
+            this.music.play();
+            this.music.setLoop(true);
+            this.music.setVolume(.8)
             this.createText();
             this.addEvents();
             this.addShip();
@@ -75,6 +87,9 @@ function SpaceInvaders() {
                 left:Phaser.Input.Keyboard.KeyCodes.A,
                 right:Phaser.Input.Keyboard.KeyCodes.D});
         }
+        loadFont(){
+            const fontLoader = this.add.text(0,0,'.', {fontFamily: 'munro'})
+        }
         addEvents() {
             this.input.keyboard.on('keydown-SPACE', shoot => {
                 this.shootLaser();
@@ -83,20 +98,22 @@ function SpaceInvaders() {
 
         shootLaser() {
             this.laserGroup.fireLaser(this.ship.x, this.ship.y, this.laserShot)
-            this.physics.add.overlap(this.laserGroup, this.enemyGroup, this.destroyEnemy, null, this)
+            this.physics.add.overlap(this.laserGroup, this.enemyGroup, this.damageEnemy, null, this)
         }
 
-        destroyEnemy (laser, enemy) {
+        damageEnemy (laser, enemy) {
             laser.disableBody(true,true)
+            enemy.health -=1
+            if (enemy.health === 0) {
             enemy.disableBody(true,true)
-            // enemy.destroy();
-            this.score += 100;
-            this.scoreText.setText('Score: ' + this.score);
-            if(this.enemyGroup.countActive(true) === 0){
-                this.spawnEnemyGroup();
-                this.wave += 1;
-                this.waveText.setText('Wave: ' + this.wave);
-            }
+            this.score += enemy.points;
+                this.scoreText.setText('Score: ' + this.score);
+                if(this.enemyGroup.countActive(true) === 0){
+                    this.wave += 1;
+                    this.waveText.setText('Wave: ' + this.wave);
+                    this.spawnEnemyGroup();
+                }
+            }    
         }
 
         spawnEnemyGroup() {
@@ -118,11 +135,11 @@ function SpaceInvaders() {
         }
 
         createText() {
-            this.scoreText = this.add.text(385, 55, 'Score: ' + this.score, { fontSize: '24px', fill: '#000' });
-            this.waveText = this.add.text(400, 75, 'Wave: 1', { fontSize: '24px', fill: '#000' });
-            this.coinText = this.add.text(400, 95, 'Coin: 0', { fontSize: '24px', fill: '#000' });
-            this.livesText = this.add.text(360,850, 'Lives', { fontSize: '24px', fill: '#000' });
-            this.healthText = this.add.text(200, 850, 'Health', { fontSize: '24px', fill: '#000'});
+            this.scoreText = this.add.text(400, 55, 'Score: ' + this.score, { fontSize: '24px', color: '#9cdc44', fontFamily: 'munro'});
+            this.waveText = this.add.text(400, 75, 'Wave: 1', { fontSize: '24px', color: '#9cdc44', fontFamily: 'munro' });
+            this.coinText = this.add.text(414, 95, 'Coin: 0', { fontSize: '24px', color: '#9cdc44', fontFamily: 'munro' });
+            this.livesText = this.add.text(375,850, 'Lives', { fontSize: '24px', color: '#9cdc44', fontFamily: 'munro' });
+            this.healthText = this.add.text(210, 850, 'Health', { fontSize: '24px', color: '#9cdc44', fontFamily: 'munro'});
         }
         createHealth() {
             this.healthImage = this.add.sprite(240, 890, 'healthBar', 0)
@@ -142,8 +159,8 @@ function SpaceInvaders() {
                 setScale: { x: 2, y: 2},
             });
         }
-        takeDamage(enemyLaser, ship) {
-            ship.disableBody(true,true)
+        takeDamage(ship, enemyLaser) {
+            enemyLaser.disableBody(true,true)
             this.health -= 1;
             this.frame += 1
             this.healthImage.setFrame(this.frame)
@@ -166,6 +183,7 @@ function SpaceInvaders() {
         }
         gameOver() {
             this.scene.pause()
+
         }
         update(time, delta) {
 
