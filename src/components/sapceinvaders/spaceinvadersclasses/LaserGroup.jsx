@@ -5,7 +5,7 @@ class LaserGroup extends Phaser.Physics.Arcade.Group
         constructor(scene) {
             super(scene.physics.world, scene,{
                 classType: Laser,
-                frameQuantity: 10,
+                frameQuantity: 1,
                 active: false,
                 visible: false,
                 key: 'laser'

@@ -2,7 +2,7 @@
 import './App.scss';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SpaceInvaders from './components/sapceinvaders/spaceinvaders';
-import DemoGame from './components/demogame'
+import DemoGame from './components/demogame/demogame'
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
         <Route path='/spaceinvaders' element={<SpaceInvaders/>} />
       </Routes>
     </Router>
+    // <SpaceInvaders/>
   );
 }
 

@@ -81,37 +81,55 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group
                 ]
             );
             const invaders = this.getChildren()
+                invaders.forEach(invader => {
+                    if (invader.frame.name === 'Invader1-0') {
+                        invader.play('invader1')
+                        invader.health = 2;
+                        invader.points = 200;
+                    } else if (invader.frame.name === 'Invader3-0') {
+                        invader.play('invader2')
+                        invader.health = 1;
+                        invader.points = 100;
+                    } else if (invader.frame.name === 'Invader5-0') {
+                        invader.play('invader3')
+                        invader.health = 1;
+                        invader.points = 100;
+                    }
+            })
             if (this.scene.wave === 2) {
                 invaders.forEach(invader => {
                     if (invader.frame.name === 'Invader1-0') {
-                        invader.frame.name = 'Invader9-0'
+                        invader.play('invader4')
+                        invader.health = 2;
+                        invader.points = 300;
+                    } else if (invader.frame.name === 'Invader3-0') {
+                        invader.play('invader1')
+                        invader.health = 1;
+                        invader.points = 200;
+                    } else if (invader.frame.name === 'Invader5-0') {
+                        invader.play('invader2')
+                        invader.health = 1;
+                        invader.points = 100;
                     }
                 })
             }
-            console.log(this.scene.wave)
-            invaders.forEach(invader => {
-                if (invader.frame.name === 'Invader1-0') {
-                    invader.play('invader1')
-                    invader.health = 2;
-                    invader.points = 200;
-                } else if (invader.frame.name === 'Invader3-0') {
-                    invader.play('invader2')
-                    invader.health = 1;
-                    invader.points = 100;
-                } else if (invader.frame.name === 'Invader5-0') {
-                    invader.play('invader3')
-                    invader.health = 1;
-                    invader.points = 100;
-                } else if (invader.frame.name === 'Invader7-0') {
-                    invader.play('invader4')
-                    invader.health = 2;
-                    invader.points = 300;
-                } else if (invader.frame.name === 'Invader9-0') {
-                    invader.play('invader5')
-                    invader.health = 3;
-                    invader.points = 400;
-                }
-            })
+            if (this.scene.wave === 3) {
+                invaders.forEach(invader => {
+                    if (invader.frame.name === 'Invader1-0') {
+                        invader.play('invader5')
+                        invader.health = 3;
+                        invader.points = 300;
+                    } else if (invader.frame.name === 'Invader3-0') {
+                        invader.play('invader4')
+                        invader.health = 2;
+                        invader.points = 200;
+                    } else if (invader.frame.name === 'Invader5-0') {
+                        invader.play('invader1')
+                        invader.health = 1;
+                        invader.points = 200;
+                    }
+                })
+            }
         }   
         
 

@@ -1,7 +1,6 @@
 import Phaser, { GameObjects } from "phaser";
 import './spaceInvadersfont.scss'
 import HealthBar from '../../assets/spaceinvaders-images/SpaceInvaders_Health.png'
-import { act } from "@testing-library/react";
 import background from '../../assets/spaceinvaders-images/SpaceInvaders_Background.png'
 import borderBox from '../../assets/spaceinvaders-images/SpaceInvaders_Borders.png'
 import laserShot from '../../assets/spaceinvaders-sounds/shoot02wav-14562.mp3'
@@ -14,12 +13,8 @@ import LaserGroup from "./spaceinvadersclasses/LaserGroup";
 import EnemyGroup from "./spaceinvadersclasses/EnemyGroup";
 import EnemyLaserGroup from "./spaceinvadersclasses/EnemyLaserGroup";
 import GameMusic from '../../assets/spaceinvaders-sounds/game-Music.mp3'
-function SpaceInvaders() {
-    class BarrierGroup extends Phaser.Physics.Arcade.Group 
-    {
 
-    }
-    
+function SpaceInvaders() {
     class SpaceInvaders extends Phaser.Scene
     {
         score;
@@ -73,13 +68,13 @@ function SpaceInvaders() {
             this.music = this.sound.add('music');
             this.music.play();
             this.music.setLoop(true);
-            this.music.setVolume(.8)
+            this.music.setVolume(.2)
             this.createText();
             this.addEvents();
             this.addShip();
             this.createHealth();
             this.createLives();
-            this.barrierGroup = new BarrierGroup(this);
+            // this.barrierGroup = new BarrierGroup(this);
             //  You should do this only once, not in the update loop
             this.cursors = this.input.keyboard.addKeys(
                 {up:Phaser.Input.Keyboard.KeyCodes.W,
@@ -183,6 +178,7 @@ function SpaceInvaders() {
         }
         gameOver() {
             this.scene.pause()
+            this.music.pause()
 
         }
         update(time, delta) {
